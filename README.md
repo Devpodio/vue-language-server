@@ -1,5 +1,7 @@
 ## Vue Language Server
 
+[![Greenkeeper badge](https://badges.greenkeeper.io/Devpodio/vue-language-server.svg)](https://greenkeeper.io/)
+
 `vue-language-server` is a language server implementation compatible with [`language-server-protocol`](https://github.com/Microsoft/language-server-protocol).
 
 Vetur is the VS Code client consuming `vue-language-server`.
