@@ -14,17 +14,19 @@ import { htmlFormat } from './services/htmlFormat';
 import { parseHTMLDocument } from './parser/htmlParser';
 import { doValidation, createLintEngine } from './services/htmlValidation';
 import { findDefinition } from './services/htmlDefinition';
-import { getTagProviderSettings } from './tagProviders';
-import { ScriptMode } from '../script/javascript';
-import { getComponentTags, getEnabledTagProviders } from './tagProviders';
+import { getTagProviderSettings, IHTMLTagProvider } from './tagProviders';
+import { getEnabledTagProviders } from './tagProviders';
 import { DocumentContext } from '../../types';
+import { VLSFormatConfig } from '../../config';
+import { VueInfoService } from '../../services/vueInfoService';
+import { getComponentInfoTagProvider } from './tagProviders/componentInfoTagProvider';
 
 type DocumentRegionCache = LanguageModelCache<VueDocumentRegions>;
 
 export function getVueHTMLMode(
   documentRegions: DocumentRegionCache,
-  workspacePath: string | null | undefined,
-  scriptMode: ScriptMode
+  workspacePath: string | undefined,
+  vueInfoService?: VueInfoService
 ): LanguageMode {
   let tagProviderSettings = getTagProviderSettings(workspacePath);
   let enabledTagProviders = getEnabledTagProviders(tagProviderSettings);
@@ -50,14 +52,19 @@ export function getVueHTMLMode(
     },
     doComplete(document: TextDocument, position: Position) {
       const embedded = embeddedDocuments.get(document);
-      const components = scriptMode.findComponents(document);
-      const tagProviders = enabledTagProviders.concat(getComponentTags(components));
-      return doComplete(embedded, position, vueDocuments.get(embedded), tagProviders, config.emmet);
+      const tagProviders: IHTMLTagProvider[] = [...enabledTagProviders];
+
+      const info = vueInfoService ? vueInfoService.getInfo(document) : undefined;
+      if (info && info.componentInfo.childComponents) {
+        tagProviders.push(getComponentInfoTagProvider(info.componentInfo.childComponents));
+      }
+
+      return doComplete(embedded, position, vueDocuments.get(embedded), tagProviders, config.emmet, info);
     },
     doHover(document: TextDocument, position: Position) {
       const embedded = embeddedDocuments.get(document);
-      const components = scriptMode.findComponents(document);
-      const tagProviders = enabledTagProviders.concat(getComponentTags(components));
+      const tagProviders: IHTMLTagProvider[] = [...enabledTagProviders];
+
       return doHover(embedded, position, vueDocuments.get(embedded), tagProviders);
     },
     findDocumentHighlight(document: TextDocument, position: Position) {
@@ -70,12 +77,12 @@ export function getVueHTMLMode(
       return findDocumentSymbols(document, vueDocuments.get(document));
     },
     format(document: TextDocument, range: Range, formattingOptions: FormattingOptions) {
-      return htmlFormat(document, range, formattingOptions, config);
+      return htmlFormat(document, range, config.vetur.format as VLSFormatConfig);
     },
     findDefinition(document: TextDocument, position: Position) {
       const embedded = embeddedDocuments.get(document);
-      const components = scriptMode.findComponents(document);
-      return findDefinition(embedded, position, vueDocuments.get(embedded), components);
+      const info = vueInfoService ? vueInfoService.getInfo(document) : undefined;
+      return findDefinition(embedded, position, vueDocuments.get(embedded), info);
     },
     onDocumentRemoved(document: TextDocument) {
       vueDocuments.onDocumentRemoved(document);

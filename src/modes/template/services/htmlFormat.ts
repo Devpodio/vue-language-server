@@ -1,31 +1,46 @@
 import * as _ from 'lodash';
-import { TextDocument, Range, TextEdit, Position, FormattingOptions } from 'vscode-languageserver-types';
+import { TextDocument, Range, TextEdit, Position } from 'vscode-languageserver-types';
 import { html as htmlBeautify } from 'js-beautify';
-import * as prettyhtml from '@starptech/prettyhtml';
+import { IPrettyHtml } from './prettyhtml';
+import { requireLocalPkg } from '../../../utils/prettier/requirePkg';
+import { getFileFsPath } from '../../../utils/paths';
+import { VLSFormatConfig } from '../../../config';
+import { Prettier } from '../../../utils/prettier/prettier';
+import { prettierify } from '../../../utils/prettier';
 
-const templateHead = '<template>';
-const templateTail = '</template>';
+const TEMPLATE_HEAD = '<template>';
+const TEMPLATE_TAIL = '</template>';
 
-export function htmlFormat(
-  document: TextDocument,
-  currRange: Range,
-  formattingOptions: FormattingOptions,
-  config: any
-): TextEdit[] {
-  if (config.vetur.format.defaultFormatter.html === 'none') {
+export function htmlFormat(document: TextDocument, currRange: Range, vlsFormatConfig: VLSFormatConfig): TextEdit[] {
+  if (vlsFormatConfig.defaultFormatter.html === 'none') {
     return [];
   }
 
   const { value, range } = getValueAndRange(document, currRange);
 
+  const originalSource = TEMPLATE_HEAD + value + TEMPLATE_TAIL;
   let beautifiedHtml: string;
-  if (config.vetur.format.defaultFormatter.html === 'prettyhtml') {
-    beautifiedHtml = formatWithPrettyHtml(templateHead + value + templateTail, formattingOptions, config);
+
+  if (vlsFormatConfig.defaultFormatter.html === 'prettyhtml') {
+    beautifiedHtml = formatWithPrettyHtml(getFileFsPath(document.uri), originalSource, vlsFormatConfig);
+  } else if (vlsFormatConfig.defaultFormatter.html === 'prettier') {
+    const prettierResult = formatWithPrettier(
+      originalSource,
+      getFileFsPath(document.uri),
+      currRange,
+      vlsFormatConfig,
+      false
+    );
+    if (prettierResult[0] && prettierResult[0].newText) {
+      beautifiedHtml = prettierResult[0].newText.trim();
+    } else {
+      beautifiedHtml = originalSource;
+    }
   } else {
-    beautifiedHtml = formatWithJsBeautify(templateHead + value + templateTail, formattingOptions, config);
+    beautifiedHtml = formatWithJsBeautify(originalSource, vlsFormatConfig);
   }
 
-  const wrappedHtml = beautifiedHtml.substring(templateHead.length, beautifiedHtml.length - templateTail.length);
+  const wrappedHtml = beautifiedHtml.substring(TEMPLATE_HEAD.length, beautifiedHtml.length - TEMPLATE_TAIL.length);
   return [
     {
       range,
@@ -34,31 +49,46 @@ export function htmlFormat(
   ];
 }
 
-function formatWithPrettyHtml(input: string, formattingOptions: FormattingOptions, config: any): string {
+function formatWithPrettyHtml(fileFsPath: string, input: string, vlsFormatConfig: VLSFormatConfig): string {
+  const prettier = requireLocalPkg(fileFsPath, 'prettier') as Prettier;
+  const prettierrcOptions = prettier.resolveConfig.sync(fileFsPath, { useCache: false }) || null;
+
+  const prettyhtml: IPrettyHtml = requireLocalPkg(fileFsPath, '@starptech/prettyhtml');
+
   const result = prettyhtml(input, {
-    useTabs: !formattingOptions.insertSpaces,
-    tabWidth: formattingOptions.tabSize,
+    useTabs: vlsFormatConfig.options.useTabs,
+    tabWidth: vlsFormatConfig.options.tabSize,
     usePrettier: true,
     prettier: {
-      ...config.prettier
+      ...prettierrcOptions
     },
-    ...config.vetur.format.defaultFormatterOptions['prettyhtml']
+    ...vlsFormatConfig.defaultFormatterOptions['prettyhtml']
   });
   return result.contents.trim();
 }
 
-function formatWithJsBeautify(input: string, formattingOptions: FormattingOptions, config: any): string {
+function formatWithJsBeautify(input: string, vlsFormatConfig: VLSFormatConfig): string {
   const htmlFormattingOptions = _.assign(
     defaultHtmlOptions,
     {
-      indent_with_tabs: !formattingOptions.insertSpaces,
-      indent_size: formattingOptions.tabSize
+      indent_with_tabs: vlsFormatConfig.options.useTabs,
+      indent_size: vlsFormatConfig.options.tabSize
     },
-    config.vetur.format.defaultFormatterOptions['js-beautify-html'],
+    vlsFormatConfig.defaultFormatterOptions['js-beautify-html'],
     { end_with_newline: false }
   );
 
   return htmlBeautify(input, htmlFormattingOptions);
+}
+
+function formatWithPrettier(
+  code: string,
+  fileFsPath: string,
+  range: Range,
+  vlsFormatConfig: VLSFormatConfig,
+  initialIndent: boolean
+) {
+  return prettierify(code, fileFsPath, range, vlsFormatConfig, 'vue', initialIndent);
 }
 
 function getValueAndRange(document: TextDocument, currRange: Range): { value: string; range: Range } {
@@ -87,6 +117,6 @@ const defaultHtmlOptions: HTMLBeautifyOptions = {
   preserve_newlines: true, // Whether existing line breaks before elements should be preserved
   unformatted: [], // Tags that shouldn't be formatted. Causes mis-alignment
   wrap_line_length: 0, // Lines should wrap at next opportunity after this number of characters (0 disables)
-  wrap_attributes: 'auto' as any
+  wrap_attributes: 'force-expand-multiline' as any
   // Wrap attributes to new lines [auto|force|force-aligned|force-expand-multiline] ["auto"]
 };
