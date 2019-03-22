@@ -9,6 +9,7 @@ console.error = connection.console.error.bind(connection.console);
 const vls = new VLS(connection);
 connection.onInitialize(
   async (params: InitializeParams): Promise<InitializeResult> => {
+    console.log('Vetur initializing');
     await vls.init(params);
 
     console.log('Vetur initialized');

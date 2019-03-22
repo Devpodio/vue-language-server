@@ -1,7 +1,8 @@
-/*---------------------------------------------------------------------------------------------
- *  Copyright (c) Microsoft Corporation. All rights reserved.
- *  Licensed under the MIT License. See License.txt in the project root for license information.
- *--------------------------------------------------------------------------------------------*/
+/* ---------------------------------------------------------------------------------------------
+ * Copyright(c) Microsoft Corporation.All rights reserved.
+ * Licensed under the MIT License.See License.txt in the project root for license information.
+ * --------------------------------------------------------------------------------------------
+ */
 'use strict';
 
 import { CancellationToken, ResponseError, ErrorCodes } from 'vscode-languageserver';
@@ -35,30 +36,6 @@ export function runSafeAsync<T>(func: () => Thenable<T>, errorVal: T, errorMessa
         console.error(formatError(errorMessage, e));
         resolve(errorVal);
       });
-    });
-  });
-}
-
-export function runSafe<T, E>(func: () => T, errorVal: T, errorMessage: string, token: CancellationToken): Thenable<T | ResponseError<E>> {
-  return new Promise<T | ResponseError<E>>((resolve, reject) => {
-    setImmediate(() => {
-      if (token.isCancellationRequested) {
-        resolve(cancelValue());
-      } else {
-        try {
-          let result = func();
-          if (token.isCancellationRequested) {
-            resolve(cancelValue());
-            return;
-          } else {
-            resolve(result);
-          }
-
-        } catch (e) {
-          console.error(formatError(errorMessage, e));
-          resolve(errorVal);
-        }
-      }
     });
   });
 }
