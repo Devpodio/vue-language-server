@@ -1,9 +1,11 @@
 {
   "compilerOptions": {
+    "removeComments": true,
     "target": "es6",
     "module": "commonjs",
     "strict": true,
     "noUnusedLocals": true,
+    "esModuleInterop": true,
     "sourceMap": true,
     "composite": true,
     "outDir": "./dist",
@@ -15,5 +17,11 @@
   },
   "include": [
     "src"
+  ],
+  "exclude": [
+    "node_modules",
+    "**/*.spec.ts",
+    "**/*.test.ts",
+    "**/*-test-util.ts"
   ]
 }

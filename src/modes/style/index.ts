@@ -5,7 +5,8 @@ import {
   getLESSLanguageService,
   LanguageService
 } from 'vscode-css-languageservice';
-import * as _ from 'lodash';
+import map from 'lodash/map';
+import concat from 'lodash/concat';
 import * as emmet from 'vscode-emmet-helper';
 
 import { Priority } from './emmet';
@@ -69,19 +70,19 @@ function getStyleMode(
       const emmetSyntax = languageId === 'postcss' ? 'css' : languageId;
       const lsCompletions = languageService.doComplete(embedded, position, stylesheets.get(embedded));
       const lsItems = lsCompletions
-        ? _.map(lsCompletions.items, i => {
-            return {
-              ...i,
-              sortText: Priority.Platform + i.label
-            };
-          })
+        ? map(lsCompletions.items, i => {
+          return {
+            ...i,
+            sortText: Priority.Platform + i.label
+          };
+        })
         : [];
 
       const emmetCompletions = emmet.doComplete(document, position, emmetSyntax, config.emmet);
       if (!emmetCompletions) {
         return { isIncomplete: false, items: lsItems };
       } else {
-        const emmetItems = _.map(emmetCompletions.items, i => {
+        const emmetItems = map(emmetCompletions.items, i => {
           return {
             ...i,
             sortText: Priority.Emmet + i.label
@@ -89,7 +90,7 @@ function getStyleMode(
         });
         return {
           isIncomplete: emmetCompletions.isIncomplete,
-          items: _.concat(emmetItems, lsItems)
+          items: concat(emmetItems, lsItems)
         };
       }
     },

@@ -4,7 +4,7 @@
  *--------------------------------------------------------------------------------------------*/
 'use strict';
 
-import * as assert from 'assert';
+import assert = require('assert');
 import { TextDocument } from 'vscode-languageserver-types';
 import * as url from 'url';
 

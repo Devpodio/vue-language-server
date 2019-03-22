@@ -42,7 +42,9 @@ import { DocumentContext } from '../types';
 import { DocumentService } from './documentService';
 import { VueInfoService } from './vueInfoService';
 import { DependencyService } from './dependencyService';
-import * as _ from 'lodash';
+import { builtInConfigs } from '../builtInConfigs';
+import get from 'lodash/get';
+import defaultsDeep from 'lodash/defaultsDeep';
 
 export class VLS {
   // @Todo: Remove this and DocumentContext
@@ -78,12 +80,14 @@ export class VLS {
   async init(params: InitializeParams) {
     const workspacePath = params.rootPath;
     if (!workspacePath) {
-      console.error('No workspace path found. Vetur initialization failed.');
+      this.displayErrorMessage('No workspace path found. Vetur initialization failed.');
       return {
         capabilities: {}
       };
     }
-
+    if (!params.initializationOptions || !params.initializationOptions.config) {
+      return this.displayErrorMessage('Missing initializationOptions.config');
+    }
     this.clientDynamicRegisterSupport = this.getClientCapability(params, 'workspace.symbol.dynamicRegistration', false);
 
     this.workspacePath = workspacePath;
@@ -91,13 +95,13 @@ export class VLS {
     await this.vueInfoService.init(this.languageModes);
     await this.dependencyService.init(
       workspacePath,
-      _.get(params.initializationOptions.config, ['vetur', 'useWorkspaceDependencies'], false)
+      get(params.initializationOptions.config, ['vetur', 'useWorkspaceDependencies'], false)
     );
     await this.languageModes.init(workspacePath, {
       infoService: this.vueInfoService,
       dependencyService: this.dependencyService
     });
-
+    params.initializationOptions.config = defaultsDeep(params.initializationOptions.config, builtInConfigs);
     this.setupConfigListeners();
     this.setupLSPHandlers();
     this.setupFileChangeListeners();
@@ -105,10 +109,7 @@ export class VLS {
     this.lspConnection.onShutdown(() => {
       this.dispose();
     });
-
-    if (params.initializationOptions && params.initializationOptions.config) {
-      this.configure(params.initializationOptions.config);
-    }
+    this.configure(params.initializationOptions.config);
   }
 
   listen() {
@@ -149,7 +150,7 @@ export class VLS {
     this.lspConnection.onCompletionResolve(this.onCompletionResolve.bind(this));
 
     this.lspConnection.onDefinition(this.onDefinition.bind(this));
-    this.lspConnection.onDocumentRangeFormatting(this.onDocumentFormatting.bind(this));
+    this.lspConnection.onDocumentFormatting(this.onDocumentFormatting.bind(this));
     this.lspConnection.onDocumentHighlight(this.onDocumentHighlight.bind(this));
     this.lspConnection.onDocumentLinks(this.onDocumentLinks.bind(this));
     this.lspConnection.onDocumentSymbol(this.onDocumentSymbol.bind(this));

@@ -1,8 +1,11 @@
 {
   "name": "@devpodio/vue-language-server",
   "description": "vue-language-server",
-  "version": "0.0.46-latest.5",
+  "version": "0.0.46-latest.8",
   "author": "Pine Wu <octref@gmail.com>",
+  "contributors": [
+    "Uni Sayo <unibtc@gmail.com>"
+  ],
   "license": "MIT",
   "main": "dist/vueServerMain.js",
   "bin": {
@@ -31,8 +34,8 @@
     "eslint": "^5.9.0",
     "eslint-plugin-vue": "^5.0.0",
     "gridsome-helper-json": "^1.0.0",
-    "js-beautify": "^1.7.5",
-    "lodash": "^4.17.4",
+    "js-beautify": "^1.9.0",
+    "lodash": "^4.17.11",
     "nuxt-helper-json": "^1.0.0",
     "parse-gitignore": "^1.0.1",
     "prettier": "^1.16.4",
@@ -67,7 +70,7 @@
     "source-map-support": "^0.5.0"
   },
   "scripts": {
-    "compile": "tsc -p .",
+    "compile": "rm -rf dist/* && tsc -p .",
     "watch": "tsc --watch",
     "test": "mocha",
     "coverage": "nyc report --reporter=text-lcov > coverage.lcov && codecov",

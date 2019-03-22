@@ -1,4 +1,4 @@
-import * as _ from 'lodash';
+import assign from 'lodash/assign';
 import { TextDocument, Range, TextEdit, Position } from 'vscode-languageserver-types';
 import { html as htmlBeautify } from 'js-beautify';
 import { IPrettyHtml } from './prettyhtml';
@@ -68,7 +68,7 @@ function formatWithPrettyHtml(fileFsPath: string, input: string, vlsFormatConfig
 }
 
 function formatWithJsBeautify(input: string, vlsFormatConfig: VLSFormatConfig): string {
-  const htmlFormattingOptions = _.assign(
+  const htmlFormattingOptions = assign(
     defaultHtmlOptions,
     {
       indent_with_tabs: vlsFormatConfig.options.useTabs,

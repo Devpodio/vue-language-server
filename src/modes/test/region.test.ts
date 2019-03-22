@@ -1,4 +1,4 @@
-import * as assert from 'assert';
+import assert = require('assert');
 import { TextDocument, Range } from 'vscode-languageserver-types';
 import { getDocumentRegions } from '../embeddedSupport';
 

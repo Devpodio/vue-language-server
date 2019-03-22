@@ -1,4 +1,6 @@
-import * as _ from 'lodash';
+import get from 'lodash/get';
+import map from 'lodash/map';
+import concat from 'lodash/concat';
 import * as emmet from 'vscode-emmet-helper';
 import { CompletionList, TextEdit } from 'vscode-languageserver-types';
 import { IStylusSupremacy } from './stylus-supremacy';
@@ -24,16 +26,16 @@ export function getStylusMode(documentRegions: LanguageModelCache<VueDocumentReg
   return {
     getId: () => 'stylus',
     configure(c) {
-      baseIndentShifted = _.get(c, 'vetur.format.styleInitialIndent', false);
+      baseIndentShifted = get(c, 'vetur.format.styleInitialIndent', false);
       config = c;
     },
-    onDocumentRemoved() {},
-    dispose() {},
+    onDocumentRemoved() { },
+    dispose() { },
     doComplete(document, position) {
       const embedded = embeddedDocuments.get(document);
 
       const lsCompletions = provideCompletionItems(embedded, position);
-      const lsItems = _.map(lsCompletions.items, i => {
+      const lsItems = map(lsCompletions.items, i => {
         return {
           ...i,
           sortText: Priority.Platform + i.label
@@ -44,7 +46,7 @@ export function getStylusMode(documentRegions: LanguageModelCache<VueDocumentReg
       if (!emmetCompletions) {
         return { isIncomplete: false, items: lsItems };
       } else {
-        const emmetItems = _.map(emmetCompletions.items, i => {
+        const emmetItems = map(emmetCompletions.items, i => {
           return {
             ...i,
             sortText: Priority.Emmet + i.label
@@ -52,7 +54,7 @@ export function getStylusMode(documentRegions: LanguageModelCache<VueDocumentReg
         });
         return {
           isIncomplete: emmetCompletions.isIncomplete,
-          items: _.concat(emmetItems, lsItems)
+          items: concat(emmetItems, lsItems)
         };
       }
     },
@@ -85,7 +87,7 @@ export function getStylusMode(documentRegions: LanguageModelCache<VueDocumentReg
       if (range.start.line !== range.end.line) {
         const styleTagLine = document.getText().split(/\r?\n/)[range.start.line];
         if (styleTagLine) {
-          baseIndent = _.get(styleTagLine.match(/^(\t|\s)+/), '0', '');
+          baseIndent = get(styleTagLine.match(/^(\t|\s)+/), '0', '');
         }
       }
 

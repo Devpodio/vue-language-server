@@ -29,8 +29,9 @@ import { prettierify, prettierEslintify } from '../../utils/prettier';
 import { getFileFsPath, getFilePath } from '../../utils/paths';
 
 import Uri from 'vscode-uri';
-import * as ts from 'typescript';
-import * as _ from 'lodash';
+import ts from 'typescript';
+import get from 'lodash/get';
+import assign from 'lodash/assign';
 
 import { nullMode, NULL_SIGNATURE } from '../nullMode';
 import { VLSFormatConfig } from '../../config';
@@ -130,7 +131,7 @@ export async function getJavascriptMode(
         return { isIncomplete: false, items: [] };
       }
       const completions = service.getCompletionsAtPosition(fileFsPath, offset, {
-        includeExternalModuleExports: _.get(config, ['vetur', 'completion', 'autoImport']),
+        includeExternalModuleExports: get(config, ['vetur', 'completion', 'autoImport']),
         includeInsertTextCompletions: false
       });
       if (!completions) {
@@ -511,7 +512,7 @@ function convertOptions(
   options: FormattingOptions,
   initialIndentLevel: number
 ): ts.FormatCodeSettings {
-  return _.assign(formatSettings, {
+  return assign(formatSettings, {
     convertTabsToSpaces: options.insertSpaces,
     tabSize: options.tabSize,
     indentSize: options.tabSize,

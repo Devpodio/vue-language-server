@@ -1,4 +1,5 @@
-import * as _ from 'lodash';
+import assign from 'lodash/assign';
+import get from 'lodash/get';
 
 import { LanguageModelCache, getLanguageModelCache } from '../languageModelCache';
 import { TextDocument, Position, Range, FormattingOptions } from 'vscode-languageserver-types';
@@ -42,7 +43,7 @@ export function getVueHTMLMode(
       return 'vue-html';
     },
     configure(c) {
-      tagProviderSettings = _.assign(tagProviderSettings, c.html.suggest);
+      tagProviderSettings = assign(tagProviderSettings, get(c, 'html.suggest', { html5: true }));
       enabledTagProviders = getEnabledTagProviders(tagProviderSettings);
       config = c;
     },

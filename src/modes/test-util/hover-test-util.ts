@@ -1,4 +1,4 @@
-import * as assert from 'assert';
+import assert = require('assert');
 import { TextDocument, Position, Hover } from 'vscode-languageserver-types';
 
 export interface HoverTestSetup {
@@ -8,7 +8,7 @@ export interface HoverTestSetup {
 }
 
 export class HoverAsserter {
-  constructor(public hover: Hover, public document: TextDocument) {}
+  constructor(public hover: Hover, public document: TextDocument) { }
   hasNothing() {
     const contents = this.hover.contents;
     if (Array.isArray(contents) || typeof contents === 'string') {

@@ -19,7 +19,10 @@ import {
 
 import * as cssSchema from './css-schema';
 import builtIn from './built-in';
-import * as _ from 'lodash';
+import startsWith from 'lodash/startsWith';
+import find from 'lodash/find';
+import compact from 'lodash/compact';
+import zip from 'lodash/zip';
 
 type CSSSchema = typeof cssSchema;
 
@@ -42,7 +45,7 @@ export function isClassOrId(currentWord: string): boolean {
  * @return {Boolean}
  */
 export function isAtRule(currentWord: string): boolean {
-  return _.startsWith(currentWord, '@');
+  return startsWith(currentWord, '@');
 }
 
 /**
@@ -77,7 +80,7 @@ export function getPropertyName(currentWord: string): string {
  */
 export function findPropertySchema(cssSchema: CSSSchema, property: string) {
   const properties = cssSchema.data.css.properties;
-  return _.find(properties, item => item.name === property);
+  return find(properties, item => item.name === property);
 }
 
 /**
@@ -154,7 +157,7 @@ function isVisible(useSite: number[] | undefined, defSite: number[] | undefined)
   if (useSite.length < defSite.length) {
     return false;
   }
-  for (const [use, def] of _.zip(useSite!, defSite)) {
+  for (const [use, def] of zip(useSite!, defSite)) {
     if (use && def && use > def) {
       return false;
     }
@@ -180,7 +183,7 @@ export function getAllSymbols(text: string, currentWord: string, position: Posit
     item => ['Media', 'Keyframes', 'Atrule', 'Import', 'Require', 'Supports', 'Literal'].indexOf(item.__type) === -1
   );
 
-  return _.compact(
+  return compact(
     rawSymbols.map(item => {
       if (!isVisible(scope, item.__scope)) {
         return undefined;

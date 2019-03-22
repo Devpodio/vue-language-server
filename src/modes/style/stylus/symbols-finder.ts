@@ -11,7 +11,8 @@ import {
   isVariableNode
 } from './parser';
 
-import * as _ from 'lodash';
+import uniqBy from 'lodash/uniqBy';
+import compact from 'lodash/compact';
 
 /**
  * Generates hash for symbol for comparison with other symbols
@@ -126,7 +127,7 @@ function _atRuleSymbol(node: StylusNode, text: string[]): SymbolInformation {
  * @return {SymbolInformation[]}
  */
 function processRawSymbols(rawSymbols: StylusNode[], text: string[]): SymbolInformation[] {
-  return _.compact(
+  return compact(
     rawSymbols.map(symNode => {
       if (isVariableNode(symNode)) {
         return _variableSymbol(symNode, text);
@@ -157,8 +158,8 @@ export function provideDocumentSymbols(document: TextDocument): SymbolInformatio
   if (!ast) {
     return [];
   }
-  const rawSymbols = _.compact(flattenAndFilterAst(ast));
+  const rawSymbols = compact(flattenAndFilterAst(ast));
   const symbolInfos = processRawSymbols(rawSymbols, text.split('\n'));
 
-  return _.uniqBy(symbolInfos, _buildHashFromSymbol);
+  return uniqBy(symbolInfos, _buildHashFromSymbol);
 }

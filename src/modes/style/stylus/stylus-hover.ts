@@ -7,7 +7,7 @@ import { buildAst, findNodeAtPosition } from './parser';
 // } from 'util'
 
 import * as cssSchema from './css-schema';
-import * as _ from 'lodash';
+import find from 'lodash/find';
 
 export function stylusHover(document: TextDocument, position: Position): Hover {
   const ast = buildAst(document.getText());
@@ -26,7 +26,7 @@ export function stylusHover(document: TextDocument, position: Position): Hover {
   if (node.__type === 'Property') {
     const property = node.segments[0].name;
     const properties = cssSchema.data.css.properties;
-    const item = _.find(properties, item => item.name === property);
+    const item = find(properties, item => item.name === property);
     const lineno = node.lineno - 1;
     const column = node.column;
     return {
