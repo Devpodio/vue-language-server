@@ -1,8 +1,8 @@
 import * as path from 'path';
-import * as ts from 'typescript';
+import ts from 'typescript';
 import Uri from 'vscode-uri';
 import { TextDocument } from 'vscode-languageserver-types';
-import * as parseGitIgnore from 'parse-gitignore';
+import parseGitIgnore from 'parse-gitignore';
 
 import { LanguageModelCache } from '../languageModelCache';
 import { createUpdater, parseVue, isVue } from './preprocess';
@@ -187,8 +187,8 @@ export function getServiceHost(
           doc.languageId === 'typescript'
             ? tsModule.Extension.Ts
             : doc.languageId === 'tsx'
-            ? tsModule.Extension.Tsx
-            : tsModule.Extension.Js;
+              ? tsModule.Extension.Tsx
+              : tsModule.Extension.Js;
         return { resolvedFileName, extension };
       });
     },
@@ -254,8 +254,8 @@ function getScriptKind(tsModule: T_TypeScript, langId: string): ts.ScriptKind {
   return langId === 'typescript'
     ? tsModule.ScriptKind.TS
     : langId === 'tsx'
-    ? tsModule.ScriptKind.TSX
-    : tsModule.ScriptKind.JS;
+      ? tsModule.ScriptKind.TSX
+      : tsModule.ScriptKind.JS;
 }
 
 function inferIsOldVersion(tsModule: T_TypeScript, workspacePath: string): boolean {

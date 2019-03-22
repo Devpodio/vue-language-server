@@ -64,6 +64,7 @@
     "@types/read-pkg-up": "^3.0.1",
     "@types/resolve": "0.0.8",
     "codecov": "^3.0.4",
+    "esm": "^3.2.20",
     "glob": "^7.1.2",
     "mocha": "^5.2.0",
     "nyc": "^13.0.1",
