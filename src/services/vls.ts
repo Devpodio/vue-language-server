@@ -201,7 +201,6 @@ export class VLS {
     this.validation.scss = veturValidationOptions.style;
     this.validation.less = veturValidationOptions.style;
     this.validation.javascript = veturValidationOptions.script;
-    console.log('Configurations:\n', JSON.stringify(config, null, 2));
     this.languageModes.getAllModes().forEach(m => {
       if (m.configure) {
         m.configure(config);
