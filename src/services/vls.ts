@@ -101,7 +101,8 @@ export class VLS {
       infoService: this.vueInfoService,
       dependencyService: this.dependencyService
     });
-    params.initializationOptions.config = defaultsDeep(params.initializationOptions.config, builtInConfigs);
+    params.initializationOptions.config = this.getConfig(params.initializationOptions.config);
+
     this.setupConfigListeners();
     this.setupLSPHandlers();
     this.setupFileChangeListeners();
@@ -114,6 +115,9 @@ export class VLS {
 
   listen() {
     this.lspConnection.listen();
+  }
+  private getConfig(configuration: any) {
+    return defaultsDeep(configuration, builtInConfigs);
   }
   private getClientCapability<T>(params: InitializeParams, name: string, def: T) {
     const keys = name.split('.');
@@ -128,7 +132,7 @@ export class VLS {
   }
   private setupConfigListeners() {
     this.lspConnection.onDidChangeConfiguration(({ settings }: DidChangeConfigurationParams) => {
-      this.configure(settings);
+      this.configure(this.getConfig(settings));
       if (this.clientDynamicRegisterSupport) {
         const enableFormatter = settings && settings.vue && settings.vue.format && settings.vue.format.enable;
         if (enableFormatter) {
@@ -197,7 +201,7 @@ export class VLS {
     this.validation.scss = veturValidationOptions.style;
     this.validation.less = veturValidationOptions.style;
     this.validation.javascript = veturValidationOptions.script;
-
+    console.log('Configurations:\n', JSON.stringify(config, null, 2));
     this.languageModes.getAllModes().forEach(m => {
       if (m.configure) {
         m.configure(config);
