@@ -4576,11 +4576,12 @@ vfile@^3.0.0:
     unist-util-stringify-position "^1.0.0"
     vfile-message "^1.0.0"
 
-vscode-css-languageservice@^3.0.12:
-  version "3.0.12"
-  resolved "https://registry.yarnpkg.com/vscode-css-languageservice/-/vscode-css-languageservice-3.0.12.tgz#fb4aac5ae3c5b761b1db1d7224b78ff824284dc3"
+vscode-css-languageservice@^4.0.0:
+  version "4.0.1"
+  resolved "https://registry.yarnpkg.com/vscode-css-languageservice/-/vscode-css-languageservice-4.0.1.tgz#8bb65970e7d62a279e2a079e4ad9eb72cd61c2b0"
+  integrity sha512-YDrWfygBG1vYCs/p95DUIig48ajQtmeyvg5ob/JNbph57Pj0TBcqhK61/HYCYh238Lsk7vwHjuhIeHl4Y5aF2w==
   dependencies:
-    vscode-languageserver-types "^3.13.0"
+    vscode-languageserver-types "^3.14.0"
     vscode-nls "^4.0.0"
 
 vscode-emmet-helper@^1.1.19:
@@ -4605,7 +4606,7 @@ vscode-languageserver-protocol@3.14.1:
     vscode-jsonrpc "^4.0.0"
     vscode-languageserver-types "3.14.0"
 
-vscode-languageserver-types@3.14.0, vscode-languageserver-types@^3.13.0, vscode-languageserver-types@^3.14.0, vscode-languageserver-types@^3.6.0-next.1:
+vscode-languageserver-types@3.14.0, vscode-languageserver-types@^3.14.0, vscode-languageserver-types@^3.6.0-next.1:
   version "3.14.0"
   resolved "https://registry.yarnpkg.com/vscode-languageserver-types/-/vscode-languageserver-types-3.14.0.tgz#d3b5952246d30e5241592b6dde8280e03942e743"
 
