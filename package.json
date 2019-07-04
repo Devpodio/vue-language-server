@@ -51,7 +51,8 @@
     "vscode-languageserver-types": "^3.14.0",
     "vscode-uri": "^1.0.1",
     "vue-onsenui-helper-json": "^1.0.2",
-    "vuetify-helper-json": "^1.0.0"
+    "vuetify-helper-json": "^1.0.0",
+    "snyk": "^1.189.0"
   },
   "devDependencies": {
     "@types/eslint": "4.16.6",
@@ -76,6 +77,9 @@
     "test": "mocha",
     "coverage": "nyc report --reporter=text-lcov > coverage.lcov && codecov",
     "newVersion": "yarn version --new-version patch -m \"vls %s\"",
-    "preversion": "npm run compile && npm test"
-  }
+    "preversion": "npm run compile && npm test",
+    "snyk-protect": "snyk protect",
+    "prepublish": "npm run snyk-protect"
+  },
+  "snyk": true
 }
