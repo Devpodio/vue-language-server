@@ -14,7 +14,10 @@ import * as readPkgUp from 'read-pkg-up';
  * @returns {string} resolved path to prettier
  */
 function findPkg(fspath: string, pkgName: string): string | undefined {
-  const { pkg, path: pkgPath } = readPkgUp.sync({ cwd: fspath, normalize: false });
+  const readPkg = readPkgUp.sync({ cwd: fspath, normalize: false });
+  if(!readPkg) return;
+  const pkg = readPkg.packageJson;
+  const pkgPath = readPkg.path;
   const { root } = path.parse(fspath);
   if (
     pkg &&
