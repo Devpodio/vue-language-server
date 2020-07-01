@@ -67,7 +67,7 @@
     "esm": "3.2.25",
     "glob": "7.1.6",
     "mocha": "7.0.1",
-    "nyc": "15.0.0",
+    "nyc": "15.1.0",
     "source-map-support": "0.5.16"
   },
   "scripts": {
