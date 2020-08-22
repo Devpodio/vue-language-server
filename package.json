@@ -63,7 +63,7 @@
     "@types/prettier": "1.19.0",
     "@types/read-pkg-up": "6.0.0",
     "@types/resolve": "1.14.0",
-    "codecov": "3.6.5",
+    "codecov": "3.7.1",
     "esm": "3.2.25",
     "glob": "7.1.6",
     "mocha": "7.0.1",
