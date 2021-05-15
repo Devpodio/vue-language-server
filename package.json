@@ -59,7 +59,7 @@
     "@types/js-beautify": "1.8.1",
     "@types/lodash": "4.14.149",
     "@types/mocha": "7.0.1",
-    "@types/node": "13.7.1",
+    "@types/node": "13.13.52",
     "@types/prettier": "1.19.0",
     "@types/read-pkg-up": "6.0.0",
     "@types/resolve": "1.14.0",
