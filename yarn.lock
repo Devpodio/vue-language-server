@@ -327,10 +327,10 @@
     "@types/minimatch" "*"
     "@types/node" "*"
 
-"@types/js-beautify@1.8.1":
-  version "1.8.1"
-  resolved "https://registry.yarnpkg.com/@types/js-beautify/-/js-beautify-1.8.1.tgz#c210b3206bece04dc240b1deeec185f7b5b03534"
-  integrity sha512-B1Br8yE27obcYvFx5ECZswT/947aAFNb9lHqnkUOhtOfvJqaa6Axibo4T+5G6iQlUfjgSd8am9R/9j9UBfRlrw==
+"@types/js-beautify@1.13.3":
+  version "1.13.3"
+  resolved "https://registry.yarnpkg.com/@types/js-beautify/-/js-beautify-1.13.3.tgz#53839bb5b766d0fb45e87386100bb3bcbb7dca9d"
+  integrity sha512-ucIPw5gmNyvRKi6mpeojlqp+T+6ZBJeU+kqMDnIEDlijEU4QhLTon90sZ3cz9HZr+QTwXILjNsMZImzA7+zuJA==
 
 "@types/json-schema@*":
   version "7.0.3"
