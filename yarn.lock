@@ -382,12 +382,10 @@
   dependencies:
     read-pkg-up "*"
 
-"@types/resolve@1.14.0":
-  version "1.14.0"
-  resolved "https://registry.yarnpkg.com/@types/resolve/-/resolve-1.14.0.tgz#c95d696264f8e53e764a7c0b83e9317b458b76c3"
-  integrity sha512-bmjNBW6tok+67iOsASeYSJxSgY++BIR35nGyGLORTDirhra9reJ0shgGL3U7KPDUbOBCx8JrlCjd4d/y5uiMRQ==
-  dependencies:
-    "@types/node" "*"
+"@types/resolve@1.20.2":
+  version "1.20.2"
+  resolved "https://registry.yarnpkg.com/@types/resolve/-/resolve-1.20.2.tgz#97d26e00cd4a0423b4af620abecf3e6f442b7975"
+  integrity sha512-60BCwRFOZCQhDncwQdxxeOEEkbc5dIMccYLwbxsS4TUNeVECQ/pBJ0j09mrHOl/JJvpRPGwO9SvE4nR2Nb/a4Q==
 
 "@types/unist@*", "@types/unist@^2.0.0", "@types/unist@^2.0.2":
   version "2.0.3"
