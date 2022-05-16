@@ -48,7 +48,7 @@
     "vscode-css-languageservice": "^3.0.12",
     "vscode-emmet-helper": "^1.1.19",
     "vscode-languageserver": "~5.2.1",
-    "vscode-languageserver-types": "~3.14.0",
+    "vscode-languageserver-types": "~3.17.0",
     "vscode-uri": "1.0.6",
     "vue-onsenui-helper-json": "^1.0.2",
     "vuetify-helper-json": "^1.0.0"
