@@ -35,7 +35,7 @@
     "eslint-plugin-vue": "^6.1.2",
     "gridsome-helper-json": "^1.0.3",
     "js-beautify": "^1.10.3",
-    "lodash": "^4.17.15",
+    "lodash": "^4.17.17",
     "nuxt-helper-json": "^1.0.0",
     "parse-gitignore": "^1.0.1",
     "prettier": "^1.19.1",
