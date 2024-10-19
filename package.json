@@ -57,7 +57,7 @@
     "@types/eslint": "6.1.8",
     "@types/glob": "7.1.1",
     "@types/js-beautify": "1.8.1",
-    "@types/lodash": "4.14.149",
+    "@types/lodash": "4.17.12",
     "@types/mocha": "7.0.1",
     "@types/node": "13.7.1",
     "@types/prettier": "1.19.0",
